@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.0;
 
-import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {MockERC20} from "./mock.sol";
 
 interface IERC777Recipient {
     function tokensReceived( // 允许 接收者 在接收代币时执行自定义逻辑 这个函数在 ERC777 代币合约调用 send 或 transfer 后自动触发，确保代币接收者可以处理接收到的代币
@@ -11,13 +11,13 @@ interface IERC777Recipient {
     ) external;
 }
 
-contract MyToken is ERC20 { 
+contract MyTokenNoMint is MockERC20 { 
     constructor(
-        string memory _name, 
-        string memory _symbol,
-        uint _initTotalSupply
-    ) ERC20(_name, _symbol) {
-        _mint(msg.sender, _initTotalSupply * (10 ** decimals()));
+        string memory name_, 
+        string memory symbol_,
+        uint8 decimals_
+    )  {
+       initialize(name_, symbol_, decimals_);
     
     }
     // isContract函数，判断地址是否为合约地址
@@ -38,6 +38,14 @@ contract MyToken is ERC20 {
         return true;
     }
 
+
+    function mint(address to, uint256 amount) external {
+        _mint(to, amount);
+    }
+
+    function burn(address from, uint256 amount) external {
+        _burn(from, amount);
+    }
 
     
 

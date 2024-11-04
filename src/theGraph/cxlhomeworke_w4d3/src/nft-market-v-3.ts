@@ -73,12 +73,13 @@ export function handleSold(event: SoldEvent): void {
     entity.blockTimestamp = event.block.timestamp
     entity.transactionHash = event.transaction.hash
     let sellOrderInfo = OrderBook.load(event.params.orderId)
+    entity.order = sellOrderInfo!.id
     if(sellOrderInfo){
       sellOrderInfo.filledTxHash = event.transaction.hash
       sellOrderInfo.save()
     }
     entity.save()
-  }
+  } 
   
   
 }

@@ -1,0 +1,27 @@
+// 用户随时可以质押项目方代币 RNT(自定义的RC20)，
+开始赚取项目方Tokex(esRNT);可随时解押提取已质押的 RNT;
+// 可随时领取esRNT奖励，每质押1个RNT每天可奖励1esRNT;
+// eSRNT 是锁仓性的 RNT，1eSRNT 在30 天后可兑换1RNT，
+随时间线性释放，支持提前将 eSRNT兑换成 RNT，但锁定部分将被 bum 燃烧掉。
+
+
+        uint256 totalAmount;
+
+   struct rewardInfo {
+        locked[] rewardDetail;
+        uint256 totalAmount;
+    }
+
+
+      struct locked {
+        uint256 amount;
+        uint256 deadline;
+
+    }
+
+    
+    从领奖励的时间开始计算锁仓时间，增加与用户交互的频次
+
+    界面计算时间，显示可兑换RNT的数量（满足30天的）
+    链上只是校验和存储，计算的动作放在链下进行
+    复杂计算在链下进行
