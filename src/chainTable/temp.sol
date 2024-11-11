@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 
 
 contract bank {
+
   struct Node {
     address user;
     uint256 deposit;
@@ -14,21 +15,21 @@ contract bank {
   address public head;                    // 链表的头节点（存款最高的用户）
   uint256 public listSize;                // 链表中用户的数量
 // orient true 代表存款，false代表取款
-  function insertOrUpdateUser(address user, uint256 amount, bool orient) public {
-      uint256 totalDeposit;
+  function insertOrUpdateUser(address user, uint256 amount, bool orient) internal {
+    uint256 totalDeposit;
+    // 检查用户是否已经存在
+    if (nodes[user].user != address(0)) {
+        // 将已有的存款金额与新存款金额相加
+        // 移除用户节点，以便重新插入
+        removeUser(user);
+    }
 
-      // 检查用户是否已经存在
-      if (nodes[user].user != address(0)) {
-          // 将已有的存款金额与新存款金额相加
-          if(orient){
-              totalDeposit = nodes[user].deposit + amount;
-          }else{
-              totalDeposit = nodes[user].deposit - amount;
-          }
+    if(orient){
+        totalDeposit = nodes[user].deposit + amount;
+    }else{
+        totalDeposit = nodes[user].deposit - amount;
+    }
           
-          // 移除用户节点，以便重新插入
-          removeUser(user);
-      }
 
       // 创建或更新节点
       Node memory newNode = Node(user, totalDeposit, address(0));
