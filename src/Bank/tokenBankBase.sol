@@ -2,8 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "chainlink-brownie-contracts/contracts/src/v0.8/automation/interfaces/KeeperCompatibleInterface.sol";
 
-contract Bank is ReentrancyGuard {
+contract Bank is ReentrancyGuard, KeeperCompatibleInterface {
     // Mapping to track user balances
     mapping(address => uint256) public balances;
 
@@ -76,6 +77,7 @@ contract Bank is ReentrancyGuard {
         returns (bool upkeepNeeded, bytes memory /* performData */)
     {
         upkeepNeeded = address(this).balance/2 >= threshold;
+        return (upkeepNeeded, "");
 
     }
 
