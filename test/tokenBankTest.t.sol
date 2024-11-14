@@ -3,7 +3,7 @@ pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
 import {MockERC20} from "forge-std/mocks/MockERC20.sol";
-import  "../src/Bank/tokenBank.sol";
+import  "../src/Bank/tokenBankWithPermit.sol";
 // import "permit2/src/interfaces/IPermit2.sol"; 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 

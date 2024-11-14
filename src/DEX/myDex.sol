@@ -1,4 +1,5 @@
 //SPDX-License-Identifier:MIT
+import {Test, console} from "forge-std/Test.sol";
 pragma solidity ^0.8.0;
 
 interface IERC20 {
@@ -23,7 +24,7 @@ interface IWETH {
     function withdraw(uint) external;
 }
 
-interface UniswapV2 {
+interface IUniswapV2 {
     function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
         payable
@@ -35,12 +36,12 @@ interface UniswapV2 {
 }
 
 
-contract MyDex {
+contract MyDex is Test{
 
-    UniswapV2 uni;
+    IUniswapV2 uni;
     address public WETH;
     constructor(address _uni,address _WETH){
-        uni = UniswapV2(_uni);
+        uni = IUniswapV2(_uni);
         WETH = _WETH;
 
     }
@@ -52,10 +53,12 @@ contract MyDex {
      * @param minBuyAmount 要求最低兑换到的 buyToken 数量
      */
     function sellETH(address buyToken,uint256 minBuyAmount) external payable  {
-        address[] memory path;
+        
+        // address[] memory path;
+        address[] memory path = new address[](2);
         path[0] = WETH;
         path[1] = buyToken;
-        uni.swapExactETHForTokens(
+        uni.swapExactETHForTokens{value:msg.value}(
             minBuyAmount,
             path,
             msg.sender,
@@ -70,7 +73,10 @@ contract MyDex {
      * @param minBuyAmount 要求最低兑换到的ETH数量
      */
     function buyETH(address sellToken,uint256 sellAmount,uint256 minBuyAmount) external {
-        address[] memory path;
+        // address[] memory path;
+        IERC20(sellToken).transferFrom(msg.sender,address(this),sellAmount);
+        IERC20(sellToken).approve(address(uni),sellAmount);
+        address[] memory path = new address[](2);
         path[0] = sellToken;
         path[1] = WETH;
         uni.swapExactTokensForETH(
