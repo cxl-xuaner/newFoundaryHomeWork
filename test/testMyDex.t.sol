@@ -33,7 +33,7 @@ contract MD is Test {
         );
         console.log("alice:",token.balanceOf(alice));
 
-        token.approve(univ2addr,type(uint256).max);
+        token.approve(address(myDex),type(uint256).max);
 
         myDex.buyETH(
                 address(token),
