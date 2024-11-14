@@ -14,7 +14,7 @@ contract Bank is ReentrancyGuard, KeeperCompatibleInterface {
     event Withdraw(address indexed user, uint256 amount);
 
     address public admin;
-    uint256 public threshold;
+    uint256 public threshold = 100;
 
     constructor(uint256 _threshold){
         admin = msg.sender;
